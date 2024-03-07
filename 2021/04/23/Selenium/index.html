@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/psyduck3232.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/psyduck1616.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yaxtang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":280,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="What is Selenium?A tool designed for web for automation testing.Support multiple languages, browsers and can run in multiple platforms. Types of Testing Captibility Testing different browser-OS combin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Selenium">
+<meta property="og:url" content="https://yaxtang.github.io/yaxtang.github.io/2021/04/23/Selenium/index.html">
+<meta property="og:site_name" content="Psyduck&#39;s paradise">
+<meta property="og:description" content="What is Selenium?A tool designed for web for automation testing.Support multiple languages, browsers and can run in multiple platforms. Types of Testing Captibility Testing different browser-OS combin">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-04-23T10:59:15.000Z">
+<meta property="article:modified_time" content="2024-02-20T15:29:46.669Z">
+<meta property="article:author" content="Psyduck">
+<meta property="article:tag" content="测试">
+<meta property="article:tag" content="Notes">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://yaxtang.github.io/yaxtang.github.io/2021/04/23/Selenium/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Selenium | Psyduck's paradise</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Psyduck's paradise</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Master student @ RWTH</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://yaxtang.github.io/yaxtang.github.io/2021/04/23/Selenium/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar/%E6%8A%B1%E5%A4%B4%E9%B8%AD.jpg">
+      <meta itemprop="name" content="Psyduck">
+      <meta itemprop="description" content="Everyone is fighting a battle you know nothing about.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Psyduck's paradise">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Selenium
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-04-23 12:59:15" itemprop="dateCreated datePublished" datetime="2021-04-23T12:59:15+02:00">2021-04-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-02-20 16:29:46" itemprop="dateModified" datetime="2024-02-20T16:29:46+01:00">2024-02-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Learn/" itemprop="url" rel="index"><span itemprop="name">Learn</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/04/23/Selenium/" class="post-meta-item leancloud_visitors" data-flag-title="Selenium" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="What-is-Selenium"><a href="#What-is-Selenium" class="headerlink" title="What is Selenium?"></a>What is Selenium?</h1><p>A tool designed for web for automation testing.<br>Support multiple languages, browsers and can run in multiple platforms.</p>
+<h1 id="Types-of-Testing"><a href="#Types-of-Testing" class="headerlink" title="Types of Testing"></a>Types of Testing</h1><ul>
+<li>Captibility Testing<ul>
+<li>different browser-OS combinations</li>
+</ul>
+</li>
+<li>Performance Testing<ul>
+<li>performance, eg. fast loading</li>
+</ul>
+</li>
+<li>Integration Testing<ul>
+<li>Things are work collaboratly</li>
+</ul>
+</li>
+<li>System testing <ul>
+<li>Black box testing, a single user workflow, whether the website is functional.</li>
+</ul>
+</li>
+<li>End-to-end Testing<ul>
+<li>all touchpoints on the web app are functional.</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+<h1 id="IP编址"><a href="#IP编址" class="headerlink" title="IP编址"></a>IP编址</h1><p>IP地址有四个字节，第一个字节代表IP地址是哪一类的。字节分类有网络地址和主机地址。主机编号的长短决定了这个网络可以容纳多少台电脑。 </p>
+<p>IP地址分为四类，A,B,C, D 和 E。</p>
+<ul>
+<li><p>A类地址</p>
+<ul>
+<li>第一个字节是网络地址，后面三个是主机地址</li>
+<li>第一个字节取值范围是8位数，所以是<code>00000000-01111111</code>， 取值范围0-127,但是127 是表示设备自己。<br>  e.g. <code>10.250.128.124</code> </li>
+<li>自然掩码 <code>255.0.0.0</code>， 一个A类地址可以容纳<code>2**24-2</code> 台电脑， <code>-2</code>是因为<code>00000000</code>是IP所在的网络地址，<code>11111111</code>是该网段中的广播地址，如果是这个地址<code>0-127.255.255.255</code>，所有这个网段的电脑都会接收到这个广播数据。注意<code>127.255.255.255</code>也是广播地址，但是只能被自己接收到，因为127表示设备自己。</li>
+</ul>
+</li>
+<li><p>B类地址</p>
+<ul>
+<li>前两个字节是网络地址，后面两个是主机地址</li>
+<li>第一个字节取值范围 1，2为恒为10，所以<code>10000000-10111111</code>，是<code>128-191</code></li>
+<li>自然掩码 <code>255.255.0.0</code></li>
+<li>网络地址可容纳<code>2**16-2</code>的电脑， <code>xxx.xxx.255.255</code>是该网络地址的广播地址。</li>
+</ul>
+</li>
+<li><p>C类地址</p>
+<ul>
+<li>前三个字节是网络地址，后面一个是主机地址</li>
+<li>第一个字节取值范围 1，2，3为恒为110，所以<code>11000000-11011111</code>，是<code>192-223</code></li>
+<li>自然掩码 <code>255.255.255.0</code>, 0是IP自己的地址</li>
+<li>网络地址可容纳<code>2**8-2</code>的电脑， <code>xxx.xxx.xxx.255</code>是该网络地址的广播地址。</li>
+</ul>
+</li>
+<li><p>D是组播</p>
+</li>
+<li><p>E保留</p>
+</li>
+<li><p>VLSM 可变长子网掩码</p>
+</li>
+</ul>
+<p>**  255.255.255.255 是这个广播地址只有一台主机</p>
+<p>Source: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/129241096">https://zhuanlan.zhihu.com/p/129241096</a></p>
+<p>TCP&#x2F;IP 五层网络架构</p>
+<ol>
+<li>应用层</li>
+<li>传输层</li>
+<li>网络层</li>
+<li>数据链路层</li>
+<li>物理层</li>
+</ol>
+<h1 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h1><ol>
+<li>MVC 是什么<br>软件框架模式， Model, viewer, controller.<br>Model 处理数据逻辑部分， viewer 是用户会看到的画面， controller是沟通model 和viewer的桥梁， 从视图收取用户数据，发送给模型。也可以从模型读取数据，再显示在视图上。</li>
+</ol>
+<h2 id="Advantage"><a href="#Advantage" class="headerlink" title="Advantage"></a>Advantage</h2><ol>
+<li>高内聚: 模块内部元素，关联性越强，内聚越高。模块单一性越强越好。</li>
+<li>低耦合: 模块之间存在依赖性，独立性越差，耦合度越高。反之若是改动一个模块不会影响另一个， 就是低耦合度。</li>
+</ol>
+<h1 id="IPC-InterProcess-Communication"><a href="#IPC-InterProcess-Communication" class="headerlink" title="IPC (InterProcess Communication)"></a>IPC (InterProcess Communication)</h1><p>进程有各自不同的用户地址空间， 任何一个进程的全局变量在另一个进程中都看不到，所以交换数据通过内核，内核提供的这种机制是进程间通信。</p>
+<h2 id="进程间通信的七种方式"><a href="#进程间通信的七种方式" class="headerlink" title="进程间通信的七种方式"></a>进程间通信的七种方式</h2><h2 id="第一类1-管道-匿名管道-pipe：-实质是内核缓冲区-数据只能一个方向流动-亲缘关系-独立文件系统-FIFO-没有名字-无格式字节流，要求事先约定好数据的格式-阻塞问题：-无需显示打开，创建时直接返回文件描述符，在读写的时候需要确定对方存在，否则退出。-写入数据超过最大值，写会被阻塞，-如果管道中没有数据，读操作会被阻塞。另一端断开将会自动退出。2-有名管道-以文件形式存在在文件系统中，没有亲缘关系也可以。只要访问到了路径，就可以互相通讯。-名字存在于文件系统中，内存存放在内存中。-组赛问题：-打开时需要确认对方存在，否则将阻塞。读之前一定有管道先写。3-Signal-Linux-系统中用于进程间互相通信或者操作的一种机制，信号可以在任何时候发给某一个进程，而无需知道该进程的状态。-异步通信方式4-消息（Message）队列"><a href="#第一类1-管道-匿名管道-pipe：-实质是内核缓冲区-数据只能一个方向流动-亲缘关系-独立文件系统-FIFO-没有名字-无格式字节流，要求事先约定好数据的格式-阻塞问题：-无需显示打开，创建时直接返回文件描述符，在读写的时候需要确定对方存在，否则退出。-写入数据超过最大值，写会被阻塞，-如果管道中没有数据，读操作会被阻塞。另一端断开将会自动退出。2-有名管道-以文件形式存在在文件系统中，没有亲缘关系也可以。只要访问到了路径，就可以互相通讯。-名字存在于文件系统中，内存存放在内存中。-组赛问题：-打开时需要确认对方存在，否则将阻塞。读之前一定有管道先写。3-Signal-Linux-系统中用于进程间互相通信或者操作的一种机制，信号可以在任何时候发给某一个进程，而无需知道该进程的状态。-异步通信方式4-消息（Message）队列" class="headerlink" title="第一类1. 管道&#x2F;匿名管道 pipe：    - 实质是内核缓冲区    - 数据只能一个方向流动    - 亲缘关系    - 独立文件系统    - FIFO    - 没有名字    - 无格式字节流，要求事先约定好数据的格式    - 阻塞问题： 无需显示打开，创建时直接返回文件描述符，在读写的时候需要确定对方存在，否则退出。 写入数据超过最大值，写会被阻塞， 如果管道中没有数据，读操作会被阻塞。另一端断开将会自动退出。2. 有名管道    - 以文件形式存在在文件系统中，没有亲缘关系也可以。只要访问到了路径，就可以互相通讯。    - 名字存在于文件系统中，内存存放在内存中。    - 组赛问题： 打开时需要确认对方存在，否则将阻塞。读之前一定有管道先写。3. Signal - Linux 系统中用于进程间互相通信或者操作的一种机制，信号可以在任何时候发给某一个进程，而无需知道该进程的状态。 - 异步通信方式4. 消息（Message）队列"></a>第一类<br>1. 管道&#x2F;匿名管道 pipe：<br>    - 实质是内核缓冲区<br>    - 数据只能一个方向流动<br>    - 亲缘关系<br>    - 独立文件系统<br>    - FIFO<br>    - 没有名字<br>    - 无格式字节流，要求事先约定好数据的格式<br>    - 阻塞问题： 无需显示打开，创建时直接返回文件描述符，在读写的时候需要确定对方存在，否则退出。 写入数据超过最大值，写会被阻塞， 如果管道中没有数据，读操作会被阻塞。另一端断开将会自动退出。<br>2. 有名管道<br>    - 以文件形式存在在文件系统中，没有亲缘关系也可以。只要访问到了路径，就可以互相通讯。<br>    - 名字存在于文件系统中，内存存放在内存中。<br>    - 组赛问题： 打开时需要确认对方存在，否则将阻塞。读之前一定有管道先写。<br>3. Signal<br> - Linux 系统中用于进程间互相通信或者操作的一种机制，信号可以在任何时候发给某一个进程，而无需知道该进程的状态。<br> - 异步通信方式<br>4. 消息（Message）队列</h2><ol start="5">
+<li>共享内存（shared memory）</li>
+</ol>
+<ul>
+<li>是最快的可用IPC形式</li>
+<li>需要依靠某种同步机制， e.g. 信号量。来达到进程间的同步与互斥。</li>
+</ul>
+<ol start="6">
+<li>信号量（semaphore）</li>
+<li>套接字（socket）</li>
+</ol>
+<ul>
+<li>客户&#x2F;服务器的系统开发工作既可以在本地单机上进行，也可以跨网络进行。</li>
+<li>套接字是支持TCP&#x2F;IP的网络通信的基本操作单元</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag"># 测试</a>
+              <a href="/tags/Notes/" rel="tag"># Notes</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/22/Jenkins/" rel="prev" title="What is Jenkins?">
+      <i class="fa fa-chevron-left"></i> What is Jenkins?
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/25/Leetcode-Sort/" rel="next" title="LEETCODE MergeSort, QuickSort">
+      LEETCODE MergeSort, QuickSort <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#What-is-Selenium"><span class="nav-number">1.</span> <span class="nav-text">What is Selenium?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Types-of-Testing"><span class="nav-number">2.</span> <span class="nav-text">Types of Testing</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IP%E7%BC%96%E5%9D%80"><span class="nav-number">3.</span> <span class="nav-text">IP编址</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java"><span class="nav-number">4.</span> <span class="nav-text">Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Advantage"><span class="nav-number">4.1.</span> <span class="nav-text">Advantage</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IPC-InterProcess-Communication"><span class="nav-number">5.</span> <span class="nav-text">IPC (InterProcess Communication)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E7%9A%84%E4%B8%83%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">5.1.</span> <span class="nav-text">进程间通信的七种方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%B1%BB1-%E7%AE%A1%E9%81%93-%E5%8C%BF%E5%90%8D%E7%AE%A1%E9%81%93-pipe%EF%BC%9A-%E5%AE%9E%E8%B4%A8%E6%98%AF%E5%86%85%E6%A0%B8%E7%BC%93%E5%86%B2%E5%8C%BA-%E6%95%B0%E6%8D%AE%E5%8F%AA%E8%83%BD%E4%B8%80%E4%B8%AA%E6%96%B9%E5%90%91%E6%B5%81%E5%8A%A8-%E4%BA%B2%E7%BC%98%E5%85%B3%E7%B3%BB-%E7%8B%AC%E7%AB%8B%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F-FIFO-%E6%B2%A1%E6%9C%89%E5%90%8D%E5%AD%97-%E6%97%A0%E6%A0%BC%E5%BC%8F%E5%AD%97%E8%8A%82%E6%B5%81%EF%BC%8C%E8%A6%81%E6%B1%82%E4%BA%8B%E5%85%88%E7%BA%A6%E5%AE%9A%E5%A5%BD%E6%95%B0%E6%8D%AE%E7%9A%84%E6%A0%BC%E5%BC%8F-%E9%98%BB%E5%A1%9E%E9%97%AE%E9%A2%98%EF%BC%9A-%E6%97%A0%E9%9C%80%E6%98%BE%E7%A4%BA%E6%89%93%E5%BC%80%EF%BC%8C%E5%88%9B%E5%BB%BA%E6%97%B6%E7%9B%B4%E6%8E%A5%E8%BF%94%E5%9B%9E%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%EF%BC%8C%E5%9C%A8%E8%AF%BB%E5%86%99%E7%9A%84%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E7%A1%AE%E5%AE%9A%E5%AF%B9%E6%96%B9%E5%AD%98%E5%9C%A8%EF%BC%8C%E5%90%A6%E5%88%99%E9%80%80%E5%87%BA%E3%80%82-%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE%E8%B6%85%E8%BF%87%E6%9C%80%E5%A4%A7%E5%80%BC%EF%BC%8C%E5%86%99%E4%BC%9A%E8%A2%AB%E9%98%BB%E5%A1%9E%EF%BC%8C-%E5%A6%82%E6%9E%9C%E7%AE%A1%E9%81%93%E4%B8%AD%E6%B2%A1%E6%9C%89%E6%95%B0%E6%8D%AE%EF%BC%8C%E8%AF%BB%E6%93%8D%E4%BD%9C%E4%BC%9A%E8%A2%AB%E9%98%BB%E5%A1%9E%E3%80%82%E5%8F%A6%E4%B8%80%E7%AB%AF%E6%96%AD%E5%BC%80%E5%B0%86%E4%BC%9A%E8%87%AA%E5%8A%A8%E9%80%80%E5%87%BA%E3%80%822-%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93-%E4%BB%A5%E6%96%87%E4%BB%B6%E5%BD%A2%E5%BC%8F%E5%AD%98%E5%9C%A8%E5%9C%A8%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%B8%AD%EF%BC%8C%E6%B2%A1%E6%9C%89%E4%BA%B2%E7%BC%98%E5%85%B3%E7%B3%BB%E4%B9%9F%E5%8F%AF%E4%BB%A5%E3%80%82%E5%8F%AA%E8%A6%81%E8%AE%BF%E9%97%AE%E5%88%B0%E4%BA%86%E8%B7%AF%E5%BE%84%EF%BC%8C%E5%B0%B1%E5%8F%AF%E4%BB%A5%E4%BA%92%E7%9B%B8%E9%80%9A%E8%AE%AF%E3%80%82-%E5%90%8D%E5%AD%97%E5%AD%98%E5%9C%A8%E4%BA%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%B8%AD%EF%BC%8C%E5%86%85%E5%AD%98%E5%AD%98%E6%94%BE%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E3%80%82-%E7%BB%84%E8%B5%9B%E9%97%AE%E9%A2%98%EF%BC%9A-%E6%89%93%E5%BC%80%E6%97%B6%E9%9C%80%E8%A6%81%E7%A1%AE%E8%AE%A4%E5%AF%B9%E6%96%B9%E5%AD%98%E5%9C%A8%EF%BC%8C%E5%90%A6%E5%88%99%E5%B0%86%E9%98%BB%E5%A1%9E%E3%80%82%E8%AF%BB%E4%B9%8B%E5%89%8D%E4%B8%80%E5%AE%9A%E6%9C%89%E7%AE%A1%E9%81%93%E5%85%88%E5%86%99%E3%80%823-Signal-Linux-%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%94%A8%E4%BA%8E%E8%BF%9B%E7%A8%8B%E9%97%B4%E4%BA%92%E7%9B%B8%E9%80%9A%E4%BF%A1%E6%88%96%E8%80%85%E6%93%8D%E4%BD%9C%E7%9A%84%E4%B8%80%E7%A7%8D%E6%9C%BA%E5%88%B6%EF%BC%8C%E4%BF%A1%E5%8F%B7%E5%8F%AF%E4%BB%A5%E5%9C%A8%E4%BB%BB%E4%BD%95%E6%97%B6%E5%80%99%E5%8F%91%E7%BB%99%E6%9F%90%E4%B8%80%E4%B8%AA%E8%BF%9B%E7%A8%8B%EF%BC%8C%E8%80%8C%E6%97%A0%E9%9C%80%E7%9F%A5%E9%81%93%E8%AF%A5%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81%E3%80%82-%E5%BC%82%E6%AD%A5%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F4-%E6%B6%88%E6%81%AF%EF%BC%88Message%EF%BC%89%E9%98%9F%E5%88%97"><span class="nav-number">5.2.</span> <span class="nav-text">第一类1. 管道&#x2F;匿名管道 pipe：    - 实质是内核缓冲区    - 数据只能一个方向流动    - 亲缘关系    - 独立文件系统    - FIFO    - 没有名字    - 无格式字节流，要求事先约定好数据的格式    - 阻塞问题： 无需显示打开，创建时直接返回文件描述符，在读写的时候需要确定对方存在，否则退出。 写入数据超过最大值，写会被阻塞， 如果管道中没有数据，读操作会被阻塞。另一端断开将会自动退出。2. 有名管道    - 以文件形式存在在文件系统中，没有亲缘关系也可以。只要访问到了路径，就可以互相通讯。    - 名字存在于文件系统中，内存存放在内存中。    - 组赛问题： 打开时需要确认对方存在，否则将阻塞。读之前一定有管道先写。3. Signal - Linux 系统中用于进程间互相通信或者操作的一种机制，信号可以在任何时候发给某一个进程，而无需知道该进程的状态。 - 异步通信方式4. 消息（Message）队列</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Psyduck"
+      src="/images/avatar/%E6%8A%B1%E5%A4%B4%E9%B8%AD.jpg">
+  <p class="site-author-name" itemprop="name">Psyduck</p>
+  <div class="site-description" itemprop="description">Everyone is fighting a battle you know nothing about.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yaxtang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yaxtang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yaxin.t@gmail.com" title="E-Mail → mailto:yaxin.t@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/yaxtang/" title="LinkedIn → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;yaxtang&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i>LinkedIn</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/404.html" title="Weibo → &#x2F;404.html"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yaxtang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"5YrJLaLJn8pvgwTIpHXWobmD-MdYXbMMI","app_key":"23Q53eBevmDpE4Skyzdxf4TH","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+  <script type="text/javascript"
+  color="0,0,0" opacity='0.5' zIndex="-2" count="150" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+</body>
+</html>

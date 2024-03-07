@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/psyduck3232.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/psyduck1616.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yaxtang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":280,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="r { color: Red } b { color: Blue } g { color: Green }   EC2 placement Groups and ENI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EC2 Storage">
+<meta property="og:url" content="https://yaxtang.github.io/yaxtang.github.io/2023/12/28/EC2-Storage/index.html">
+<meta property="og:site_name" content="Psyduck&#39;s paradise">
+<meta property="og:description" content="r { color: Red } b { color: Blue } g { color: Green }   EC2 placement Groups and ENI">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-12-28T19:52:59.000Z">
+<meta property="article:modified_time" content="2024-02-27T11:25:36.705Z">
+<meta property="article:author" content="Psyduck">
+<meta property="article:tag" content="AWS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://yaxtang.github.io/yaxtang.github.io/2023/12/28/EC2-Storage/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>EC2 Storage | Psyduck's paradise</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Psyduck's paradise</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Master student @ RWTH</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://yaxtang.github.io/yaxtang.github.io/2023/12/28/EC2-Storage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar/%E6%8A%B1%E5%A4%B4%E9%B8%AD.jpg">
+      <meta itemprop="name" content="Psyduck">
+      <meta itemprop="description" content="Everyone is fighting a battle you know nothing about.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Psyduck's paradise">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          EC2 Storage
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-12-28 20:52:59" itemprop="dateCreated datePublished" datetime="2023-12-28T20:52:59+01:00">2023-12-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-02-27 12:25:36" itemprop="dateModified" datetime="2024-02-27T12:25:36+01:00">2024-02-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Learn/" itemprop="url" rel="index"><span itemprop="name">Learn</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2023/12/28/EC2-Storage/" class="post-meta-item leancloud_visitors" data-flag-title="EC2 Storage" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <style>
+r { color: Red }
+b { color: Blue }
+g { color: Green }
+</style>
+
+<p>EC2 placement Groups and ENI</p>
+<span id="more"></span>
+
+<h2 id="EC2-Instance-Placement-Groups"><a href="#EC2-Instance-Placement-Groups" class="headerlink" title="EC2 Instance Placement Groups"></a>EC2 Instance Placement Groups</h2><ul>
+<li>Cluster: cluster instances into a <g><strong>low-latency</strong></g> group in a single availability Zone, in same rack. <g>Great network, big data job that needs to complete fast, high network throughput</g>, <r>one rack fails , all instances fails at the same time</r></li>
+<li>Spread: Spreads instances across underlying different hardwares, for critical applications. <g>reduced risk of simultianeous failure becasue intances on different physical hardware</g> <r>limited to 7 instances per AZ per placement group</r><ul>
+<li>application needs to max high availability</li>
+<li>Critical applications where each instance must be isolated from failure from each other</li>
+</ul>
+</li>
+<li>Partition: partition instances across many different partitions<ul>
+<li>each partition is a rack</li>
+<li>partitions share different hardwares so failure will not affect in between</li>
+<li>e.g. HDFS, HBase, Cassangra, Kafka</li>
+</ul>
+</li>
+</ul>
+<p>Elastic Network Interfaces (<strong>ENI</strong>)</p>
+<ul>
+<li>Logical component, Virtual network card, use for instances to access network</li>
+<li>attributes<ul>
+<li>primary private IPv4, one or more secondary IPv4</li>
+<li>one Elastic IP per private IPv4</li>
+<li>one Public IPv4</li>
+<li>one or more security groups</li>
+<li>A MAC address</li>
+</ul>
+</li>
+<li>Bound to a specifica avilability zone (AZ)</li>
+</ul>
+<h2 id="EC2-Hibernate"><a href="#EC2-Hibernate" class="headerlink" title="EC2 Hibernate"></a>EC2 Hibernate</h2><ul>
+<li>Hibernation is a process of after stopping instances, the RAM will be stored in root EBS volume (encrypted). And this makes next time re&#x2F;starting the instance can still get back the RAM state. not over 60 days. </li>
+<li>it support on-demand, spot and reserved instances</li>
+<li>To enable EC2 Hibernate, the EC2 Instance Root Volume type must be an EBS volume and must be encrypted to ensure the protection of sensitive content.</li>
+<li>Use cases: <ul>
+<li>Long-running processing</li>
+<li>Saving the RAM state</li>
+<li>service need time to initiate</li>
+</ul>
+</li>
+</ul>
+<p>Commandline:</p>
+<ul>
+<li>command <code>uptime</code> gives how long since the instances start</li>
+</ul>
+<h2 id="EBS-Volume"><a href="#EBS-Volume" class="headerlink" title="EBS Volume"></a>EBS Volume</h2><ul>
+<li>EBS Volume : by default the root EBS volume is deleted</li>
+<li>exam scenario: if you want to preserve the EBS volume what you should do : disbale the DElete on Termination</li>
+</ul>
+<p>EBS Snapshots</p>
+<ul>
+<li>a backup for EBS volume</li>
+</ul>
+<p>AMIs Amazon Machine Image</p>
+<ul>
+<li>are built for a specific AWS Region, they’re unique for each AWS Region. You can’t launch an EC2 instance using an AMI in another AWS Region, but you can copy the AMI to the target AWS Region and then use it to create your EC2 instances.</li>
+</ul>
+<p>EC2 Instances Store</p>
+<ul>
+<li>good for buffer&#x2F;cache&#x2F;temporary content </li>
+<li>will lose if instance stopped</li>
+</ul>
+<p>Types of EBS Volume</p>
+<ul>
+<li>has six types</li>
+<li>only g2&#x2F;g3 io1&#x2F; io2 block express can be used as boot volumes.</li>
+<li>g2&#x2F;g3 general purpose ssd, 1gib-16TiB, max 16,00 IOPS</li>
+<li>io1&#x2F;io2 greater for database, 4gib -16gib, max piops 64,00. io2 block express is four times more than io1. <g> support EBS multi-attach</g></li>
+<li>hard disk drives, st1 and sc1: frequency data for st1, infrequently sc1. But both are for big data.<br>-Any other EBS volume types will not be deleted as its “Delete On Termination” attribute disabled by default.</li>
+</ul>
+<p>EBS Multi-Attach io1&#x2F;io2 family</p>
+<ul>
+<li>attach the same EBS volume to multiple EC2 instances in the same AZ, each EC2 instance has full read&#x2F;write permissions.</li>
+<li>up to 16 EC2 Instances at a time</li>
+<li>must a use a file system that’s cluster-aware</li>
+</ul>
+<p>EBS Encryption</p>
+<ul>
+<li>do it!</li>
+<li>in actual use you need to enable encryption</li>
+</ul>
+<h2 id="Amazon-EFS-Elastic-file-system"><a href="#Amazon-EFS-Elastic-file-system" class="headerlink" title="Amazon EFS Elastic file system"></a>Amazon EFS Elastic file system</h2><ul>
+<li>Throughput mode<ul>
+<li>Bursting: 1 TB</li>
+<li>Elastic: automatically decide depends on the workload</li>
+<li>Provisioned: de-correlated the throughput and the storage size</li>
+</ul>
+</li>
+<li>EFS is a network file system (NFS) that allows you to mount the same file system on EC2 instances that are in different AZs.</li>
+</ul>
+<h2 id="EBS-and-EFS-and-instance-store"><a href="#EBS-and-EFS-and-instance-store" class="headerlink" title="EBS and EFS and instance store"></a>EBS and EFS and instance store</h2><p>EBS</p>
+<ul>
+<li>EBS attach to one instances a time (except multi attach) locked at AZ level</li>
+<li>Migrate an EBS to another AZ use snapshot</li>
+<li>Root EBS volumns terminiated by default unless disabled</li>
+</ul>
+<p>EFS</p>
+<ul>
+<li>EFS only for linux</li>
+</ul>
+<p>instance store</p>
+<ul>
+<li>EC2 Instance Store provides the best disk I&#x2F;O performance.</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Q: You would like to encrypt an unencrypted EBS volume attached to your EC2 instance. What should you do?</span><br><span class="line"></span><br><span class="line">A: Create an EBS snapshot of your EBS volume, COpu the snapshot and tick the option to encrypt the copied snamshot. Then, use the encrypted snapshot to create a new EBS volume.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AWS/" rel="tag"># AWS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/12/21/AWS-EC2-Fundamentals/" rel="prev" title="AWS EC2 Fundamentals">
+      <i class="fa fa-chevron-left"></i> AWS EC2 Fundamentals
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/01/07/RDS/" rel="next" title="RDS">
+      RDS <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#EC2-Instance-Placement-Groups"><span class="nav-number">1.</span> <span class="nav-text">EC2 Instance Placement Groups</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EC2-Hibernate"><span class="nav-number">2.</span> <span class="nav-text">EC2 Hibernate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EBS-Volume"><span class="nav-number">3.</span> <span class="nav-text">EBS Volume</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Amazon-EFS-Elastic-file-system"><span class="nav-number">4.</span> <span class="nav-text">Amazon EFS Elastic file system</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EBS-and-EFS-and-instance-store"><span class="nav-number">5.</span> <span class="nav-text">EBS and EFS and instance store</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Psyduck"
+      src="/images/avatar/%E6%8A%B1%E5%A4%B4%E9%B8%AD.jpg">
+  <p class="site-author-name" itemprop="name">Psyduck</p>
+  <div class="site-description" itemprop="description">Everyone is fighting a battle you know nothing about.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yaxtang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yaxtang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yaxin.t@gmail.com" title="E-Mail → mailto:yaxin.t@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/yaxtang/" title="LinkedIn → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;yaxtang&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i>LinkedIn</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/404.html" title="Weibo → &#x2F;404.html"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yaxtang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"5YrJLaLJn8pvgwTIpHXWobmD-MdYXbMMI","app_key":"23Q53eBevmDpE4Skyzdxf4TH","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+  <script type="text/javascript"
+  color="0,0,0" opacity='0.5' zIndex="-2" count="150" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+</body>
+</html>
